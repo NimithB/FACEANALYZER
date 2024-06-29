@@ -35,7 +35,7 @@ if __name__ == '__main__':
     # Specify the path to the image you want to analyze
     image_path = r'D:\dbms\image.jpg'
     
-    # Process image and get predictions
+    
     predictions = process_image(image_path)
     
     if 'error' in predictions:
