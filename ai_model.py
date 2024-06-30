@@ -47,4 +47,6 @@ if __name__ == '__main__':
         print(f"Race: {predictions['race']}")
         print(f"Expression: {predictions['expression']}")
 
+git config user.email "brindha715n@gmail.com"
+git config user.name "Brindha715"
 
