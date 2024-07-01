@@ -87,8 +87,13 @@
             if (result.error) {
                 resultDiv.innerText = `Error: ${result.error}`;
             } else {
-                // Display the result string directly
-                resultDiv.innerText = result.result;
+                resultDiv.innerHTML = `
+                    <p>Name: ${result.name}</p>
+                    <p>Age: ${result.age}</p>
+                    <p>Gender: ${result.gender}</p>
+                    <p>Race: ${result.race}</p>
+                    <p>Expression: ${result.expression}</p>
+                `;
             }
         });
     </script>

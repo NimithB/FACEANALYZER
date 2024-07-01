@@ -2,8 +2,9 @@ from flask import Flask, request, jsonify, render_template
 import subprocess
 import base64
 import os
+import json
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 
 # Serve the index.html page
 @app.route('/')
@@ -28,30 +29,31 @@ def analyze():
         base64_str = data_url.split(',')[1]
         image_data = base64.b64decode(base64_str)
         
+        # Save image to 'static/uploads/image.jpg'
+        upload_dir = os.path.join(app.root_path, 'static', 'uploads')
+        if not os.path.exists(upload_dir):
+            os.makedirs(upload_dir)
+        
+        image_path = os.path.join(upload_dir, 'image.jpg')
+        with open(image_path, 'wb') as f:
+            f.write(image_data)
+        
         # Call ai_model.py with image data
         process = subprocess.Popen(
-            ['python', 'D:/dbms/ai_model.py'],
+            ['python', 'D:/dbms/ai_model.py', image_path],
             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
-        stdout, stderr = process.communicate(input=image_data)
+        stdout, stderr = process.communicate()
         
-        if stderr:
-            return jsonify({'error': stderr.decode()}), 500
+       
         
-        # Parse predictions from ai_model.py output
-        predictions = stdout.decode().strip().split('==, ')
-        if len(predictions) != 4:
-            return jsonify({'error': 'Invalid predictions format'}), 500
-
-        age, gender, race, expression = [p.strip('==') for p in predictions]
+        # Capture the predictions from ai_model.py output
+        result_string = stdout.decode().strip()
+        print("Captured result:", result_string)  # Print for debugging
         
-        # Return predictions as JSON response
+        # Return the result string directly as JSON response
         return jsonify({
-            'name': name,
-            'age': age,
-            'gender': gender,
-            'race': race,
-            'expression': expression
+            'result': result_string
         })
     
     except Exception as e:
