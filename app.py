@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template
 import subprocess
 import base64
 import os
-import json
+from ai_model import analyze_image  # Import the function to analyze the image
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -39,17 +39,7 @@ def analyze():
             f.write(image_data)
         
         # Call ai_model.py with image data
-        process = subprocess.Popen(
-            ['python', 'D:/dbms/ai_model.py', image_path],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        stdout, stderr = process.communicate()
-        
-       
-        
-        # Capture the predictions from ai_model.py output
-        result_string = stdout.decode().strip()
-        print("Captured result:", result_string)  # Print for debugging
+        result_string = analyze_image(image_path)
         
         # Return the result string directly as JSON response
         return jsonify({

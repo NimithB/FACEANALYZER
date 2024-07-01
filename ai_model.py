@@ -1,12 +1,9 @@
 from deepface import DeepFace
 
-def process_image(image_path):
+def analyze_image(image_path):
     try:
-       
-        
         # Analyze image using DeepFace
         result = DeepFace.analyze(img_path=image_path, actions=['age', 'gender', 'race', 'emotion'])
-       
         
         # Access the first dictionary in the list
         result = result[0]
@@ -25,14 +22,11 @@ def process_image(image_path):
     
     except Exception as e:
         print("Error analyzing image:", str(e))
-        return {'error': str(e)}
+        return str(e)
 
 if __name__ == '__main__':
     # Specify the path to the image you want to analyze
     image_path = r'D:\dbms\image.jpg'
     
-    predictions = process_image(image_path)
-    
-    if 'error' in predictions:
-        print(predictions['error'])
-    
+    predictions = analyze_image(image_path)
+    print(predictions)  # Print predictions for debugging
